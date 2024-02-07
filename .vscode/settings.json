@@ -1,4 +1,7 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "cmake.sourceDirectory": "/Users/admin/Desktop/youchat/linux/flutter"
+    "cmake.sourceDirectory": "/Users/admin/Desktop/youchat/linux/flutter",
+    "cSpell.words": [
+        "Snak"
+    ]
 }

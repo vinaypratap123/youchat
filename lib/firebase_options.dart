@@ -66,6 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '956316131173',
     projectId: 'youchat-5af87',
     storageBucket: 'youchat-5af87.appspot.com',
+    androidClientId: '956316131173-828jabtsihs1ld33uu1a5i8rdgtjf3o1.apps.googleusercontent.com',
+    iosClientId: '956316131173-ue6n24h3010b1uuavc63otisbk9tq51d.apps.googleusercontent.com',
     iosBundleId: 'com.whatsapp.youchat',
   );
 
@@ -75,6 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '956316131173',
     projectId: 'youchat-5af87',
     storageBucket: 'youchat-5af87.appspot.com',
+    androidClientId: '956316131173-828jabtsihs1ld33uu1a5i8rdgtjf3o1.apps.googleusercontent.com',
+    iosClientId: '956316131173-vpuhmv630b5734a3de70r01f39k82bbr.apps.googleusercontent.com',
     iosBundleId: 'com.whatsapp.youchat.RunnerTests',
   );
 }

@@ -6,9 +6,8 @@ import 'package:youchat/firebase_options.dart';
 import 'package:youchat/screens/splash_screens/splash_screen.dart';
 
 void main() {
-  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
- _initializedFirebase();
-    runApp(const MyApp());
+  _initializedFirebase();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

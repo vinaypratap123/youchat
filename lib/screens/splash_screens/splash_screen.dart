@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:youchat/apis/apis.dart';
 import 'package:youchat/app/app_colors.dart';
 import 'package:youchat/app/app_strings.dart';
 import 'package:youchat/app/app_styles.dart';
@@ -16,20 +17,13 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
-    Timer(
-      Duration(seconds: 2),
-      () {
-        // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    Future.delayed(const Duration(seconds: 2), () {
+      if (Apis.auth.currentUser != null) {
+        Navigator.pushNamed(context, RoutesName.homeScreen);
+      } else {
         Navigator.pushNamed(context, RoutesName.loginScreen);
-        // if (Apis.auth.currentUser != null) {
-        //   Navigator.pushReplacement(
-        //       context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        // } else {
-        //   Navigator.pushReplacement(
-        //       context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        // }
-      },
-    );
+      }
+    });
   }
 
   @override
@@ -41,10 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-                child: Text(
-              AppString.madeByVinay,
-              style: AppStyle.largeTextStyle,
-            )),
+              child: Text(
+                AppString.madeByVinay,
+                style: AppStyle.largeTextStyle,
+              ),
+            ),
           ],
         ),
       ),

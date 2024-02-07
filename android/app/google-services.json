@@ -12,7 +12,20 @@
           "package_name": "com.whatsapp.youchat"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "956316131173-828jabtsihs1ld33uu1a5i8rdgtjf3o1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.whatsapp.youchat",
+            "certificate_hash": "552c709faed534e74fb7bb7f1961093cbf7f9c34"
+          }
+        },
+        {
+          "client_id": "956316131173-0u5qi3g7211e89ivgan3q3bac7pq6qgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBoxVp3IdJAkWuqzjSsN0rMSgL1z1atb88"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956316131173-0u5qi3g7211e89ivgan3q3bac7pq6qgo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "956316131173-ue6n24h3010b1uuavc63otisbk9tq51d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.whatsapp.youchat"
+              }
+            }
+          ]
         }
       }
     }
