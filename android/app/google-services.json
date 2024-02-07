@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "956316131173",
+    "project_id": "youchat-5af87",
+    "storage_bucket": "youchat-5af87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956316131173:android:ad33f3107181b9ffc38b8c",
+        "android_client_info": {
+          "package_name": "com.whatsapp.youchat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoxVp3IdJAkWuqzjSsN0rMSgL1z1atb88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
