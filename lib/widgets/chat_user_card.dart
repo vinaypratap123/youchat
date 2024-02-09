@@ -21,59 +21,45 @@ class _ChatUserCardState extends State<ChatUserCard> {
       color: AppColor.bgLight2,
       elevation: 0,
       child: ListTile(
-          onTap: () {},
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: CachedNetworkImage(
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
-              imageUrl: widget.user.image.toString(),
-              errorWidget: (context, url, error) => CircleAvatar(
-                backgroundColor: AppColor.bgLight2,
-                child: Icon(
-                  Icons.person,
-                  size: 35,
-                  color: AppColor.whiteSecondary,
-                ),
+        onTap: () {},
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(25),
+          child: CachedNetworkImage(
+            height: 50,
+            width: 50,
+            fit: BoxFit.cover,
+            imageUrl: widget.user.image.toString(),
+            errorWidget: (context, url, error) => CircleAvatar(
+              backgroundColor: AppColor.bgLight2,
+              child: Icon(
+                Icons.person,
+                size: 35,
+                color: AppColor.whiteSecondary,
               ),
             ),
           ),
-          // : CircleAvatar(
-          //     radius: 25,
-          //     child: Icon(
-          //       Icons.person,
-          //       size: 30,
-          //     ),
-          //   )
-          // CircleAvatar(
-          //   backgroundColor: AppColor.bgLight1,
-          //   child: Icon(
-          //     Icons.person,
-          //     color: AppColor.whiteSecondary,
-          //     size: 30,
-          //   ),
-          // ),
-          title: Text(
-            widget.user.name,
-            style: TextStyle(
-              color: AppColor.whiteSecondary,
-            ),
+        ),
+        title: Text(
+          widget.user.name,
+          style: TextStyle(
+            color: AppColor.whiteSecondary,
           ),
-          subtitle: Text(
-            widget.user.about,
-            style: TextStyle(
-              color: AppColor.whitePrimary,
-            ),
+        ),
+        subtitle: Text(
+          widget.user.about,
+          style: TextStyle(
+            color: AppColor.whitePrimary,
           ),
-          trailing: Container(
-            height: 10,
-            width: 10,
-            decoration: BoxDecoration(
-              color: AppColor.greenColor,
-              borderRadius: BorderRadius.circular(5),
-            ),
-          )),
+        ),
+        trailing: Container(
+          height: 10,
+          width: 10,
+          decoration: BoxDecoration(
+            color: AppColor.greenColor,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+      ),
     );
   }
 }

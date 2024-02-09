@@ -17,13 +17,16 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      if (Apis.auth.currentUser != null) {
-        Navigator.pushNamed(context, RoutesName.homeScreen);
-      } else {
-        Navigator.pushNamed(context, RoutesName.loginScreen);
-      }
-    });
+    Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        if (Apis.auth.currentUser != null) {
+          Navigator.pushNamed(context, RoutesName.homeScreen);
+        } else {
+          Navigator.pushNamed(context, RoutesName.loginScreen);
+        }
+      },
+    );
   }
 
   @override

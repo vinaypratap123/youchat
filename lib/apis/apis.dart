@@ -43,7 +43,7 @@ class Apis {
       id: user.uid,
       name: user.displayName.toString(),
       email: user.email.toString(),
-      about: "Hey there, I'm using You Chat!",
+      about: "Hey there, I'm using YouChat!",
       image: user.photoURL.toString(),
       createdAt: time,
       isOnline: false,
@@ -84,6 +84,18 @@ class Apis {
       UiHelper.showSnakBar(context, error.toString(), AppColor.redColor);
       return null;
     }
+  }
+
+  // ************************************  getCurrentUserInfo() function ******************************************
+  static Future<void> getCurrentUserInfo() async {
+    await firestore.collection("users").doc(user.uid).get().then((user) async {
+      if (user.exists) {
+        currentUser = ChatUserModel.fromJson(user.data()!);
+        // await getFirebaseMessagingToken();
+      } else {
+        await createUser().then((value) => getCurrentUserInfo());
+      }
+    });
   }
   // ************************************  sendPushNotification() function *******************************
   // static Future<void> sendPushNotification(
@@ -150,18 +162,6 @@ class Apis {
   //       .then((value) {});
   // }
 
-  // ************************************  getCurrentUserInfo() function ******************************************
-  // static Future<void> getCurrentUserInfo() async {
-  //   await firestore.collection("users").doc(user.uid).get().then((user) async {
-  //     if (user.exists) {
-  //       currentUser = ChatUser.fromJson(user.data()!);
-  //       await getFirebaseMessagingToken();
-  //     } else {
-  //       await createUser().then((value) => getCurrentUserInfo());
-  //     }
-  //   });
-  // }
-
   // ************************************  getConversationId() arrow function ******************************************
   // static String getConversationId(String id) => user.uid.hashCode <= id.hashCode
   //     ? "${user.uid}_$id"
@@ -217,12 +217,11 @@ class Apis {
   // }
 
   // ************************************ updateUserInfo() function ******************************************
-  // static Future<void> updateUserInfo() async {
-  //   await firestore
-  //       .collection("users")
-  //       .doc(user.uid)
-  //       .update({"name": currentUser!.name, "about": currentUser!.about});
-  // }
+  static Future<void> updateUserInfo() async {
+    await firestore.collection("users").doc(user.uid).update(
+      {"name": currentUser!.name, "about": currentUser!.about},
+    );
+  }
 
   // ************************************ sendMessage() function ******************************************
   // static Future<void> sendMessage(
@@ -242,15 +241,15 @@ class Apis {
   // }
 
   // ************************************ updateProfilePicture() function ******************************************
-  // static Future<void> updateProfilePicture(file) async {
-  //   final ext = file.path.split(".").last;
-  //   final ref = storage.ref().child("profile_picture/${user.uid}.$ext");
-  //   await ref.putFile(file, SettableMetadata(contentType: "image/$ext"));
-  //   currentUser!.image = await ref.getDownloadURL();
-  //   await firestore.collection("users").doc(user.uid).update({
-  //     "image": currentUser!.image,
-  //   });
-  // }
+  static Future<void> updateProfilePicture(file) async {
+    final ext = file.path.split(".").last;
+    final ref = storage.ref().child("profile_picture/${user.uid}.$ext");
+    await ref.putFile(file, SettableMetadata(contentType: "image/$ext"));
+    currentUser!.image = await ref.getDownloadURL();
+    await firestore.collection("users").doc(user.uid).update({
+      "image": currentUser!.image,
+    });
+  }
 
   // ************************************ updateMessageReadTime() function ******************************************
   // static Future<void> updateMessageReadTime(Message message) async {

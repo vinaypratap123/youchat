@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:youchat/app/app_strings.dart';
 import 'package:youchat/app/app_styles.dart';
 import 'package:youchat/app/routes/routes_name.dart';
+import 'package:youchat/models/chat_user_model.dart';
 import 'package:youchat/screens/auth/login_screen.dart';
 import 'package:youchat/screens/home_screen.dart';
 import 'package:youchat/screens/user_profile_screen.dart';
@@ -23,7 +24,11 @@ class OnGenerateRoute {
       // ************ USER PROFILE SCREEN ROUTE *******************
       case RoutesName.userProfileScreen:
         {
-          return routeBuilder(const UserProfileScreen());
+          return routeBuilder(
+            UserProfileScreen(
+              user: args as ChatUserModel,
+            ),
+          );
         }
 
       // ************ DEFAULT ROUTE *******************
@@ -31,7 +36,10 @@ class OnGenerateRoute {
         return MaterialPageRoute(builder: (_) {
           return const Scaffold(
             body: Center(
-              child: Text(AppString.noSuchRoueDefined,style: AppStyle.largeTextStyle,),
+              child: Text(
+                AppString.noSuchRoueDefined,
+                style: AppStyle.largeTextStyle,
+              ),
             ),
           );
         });

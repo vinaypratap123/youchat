@@ -3,7 +3,7 @@ import 'package:youchat/app/app_colors.dart';
 
 class UiHelper {
   // ============================ showSnakBar()==============================
-  static void showSnakBar(BuildContext context, String message,Color color) {
+  static void showSnakBar(BuildContext context, String message, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
