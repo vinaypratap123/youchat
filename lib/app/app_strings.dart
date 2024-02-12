@@ -13,4 +13,6 @@ class AppString {
   static const nameCanNotBeEmpty = "Name can not be empty";
   static const aboutCanNotBeEmpty = "About can not be empty";
   static const selectProfilePhoto = "Select profile photo";
+  static const typeMessage = "Type message...";
+  static const sayHi = "Say Hi 👋";
 }

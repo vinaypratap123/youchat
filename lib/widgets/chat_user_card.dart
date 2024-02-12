@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:youchat/app/app_colors.dart';
+import 'package:youchat/app/routes/routes_name.dart';
 import 'package:youchat/models/chat_user_model.dart';
 
 class ChatUserCard extends StatefulWidget {
@@ -21,7 +22,9 @@ class _ChatUserCardState extends State<ChatUserCard> {
       color: AppColor.bgLight2,
       elevation: 0,
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context,RoutesName.chatScreen,arguments: widget.user);
+        },
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(25),
           child: CachedNetworkImage(

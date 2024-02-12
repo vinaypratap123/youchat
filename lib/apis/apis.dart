@@ -163,18 +163,18 @@ class Apis {
   // }
 
   // ************************************  getConversationId() arrow function ******************************************
-  // static String getConversationId(String id) => user.uid.hashCode <= id.hashCode
-  //     ? "${user.uid}_$id"
-  //     : "${id}_${user.uid}";
+  static String getConversationId(String id) => user.uid.hashCode <= id.hashCode
+      ? "${user.uid}_$id"
+      : "${id}_${user.uid}";
 
   // ************************************ getAllMessages() function ******************************************
-  // static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
-  //     ChatUser user) {
-  //   return firestore
-  //       .collection("chats/${getConversationId(user.id)}/message/")
-  //       .orderBy("sent", descending: true)
-  //       .snapshots();
-  // }
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllMessages(
+      ChatUserModel user) {
+    return firestore
+        .collection("chats/${getConversationId(user.id)}/message/")
+        .orderBy("sent", descending: true)
+        .snapshots();
+  }
 
   // ************************************ getLastMessages() function ******************************************
   // static Future<bool> hasLastMessage(ChatUser user) async {

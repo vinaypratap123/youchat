@@ -7,4 +7,7 @@ class RoutesName {
 
   // ************ USER PROFILE SCREEN ROUTE *******************
   static const String userProfileScreen = 'user_profile_screen';
+
+  // ************ CHAT SCREEN ROUTE *******************
+  static const String chatScreen = 'chat_screen';
 }
