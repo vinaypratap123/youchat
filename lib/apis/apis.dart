@@ -9,6 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:youchat/app/app_colors.dart';
 import 'package:youchat/app/ui_helper.dart';
 import 'package:youchat/models/chat_user_model.dart';
+import 'package:youchat/models/message_model.dart';
 
 class Apis {
   // ************************************ FirebaseAuth instance *************************************
@@ -177,25 +178,25 @@ class Apis {
   }
 
   // ************************************ getLastMessages() function ******************************************
-  // static Future<bool> hasLastMessage(ChatUser user) async {
-  //   final querySnapshot = await firestore
-  //       .collection("chats/${getConversationId(user.id)}/message/")
-  //       .orderBy("sent", descending: true)
-  //       .limit(1)
-  //       .get();
+  static Future<bool> hasLastMessage(ChatUserModel user) async {
+    final querySnapshot = await firestore
+        .collection("chats/${getConversationId(user.id)}/message/")
+        .orderBy("sent", descending: true)
+        .limit(1)
+        .get();
 
-  //   return querySnapshot.docs.isNotEmpty;
-  // }
+    return querySnapshot.docs.isNotEmpty;
+  }
 
   // ************************************ getLastMessages() function ******************************************
-  // static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessages(
-  //     ChatUser user) {
-  //   return firestore
-  //       .collection("chats/${getConversationId(user.id)}/message/")
-  //       .orderBy("sent", descending: true)
-  //       .limit(1)
-  //       .snapshots();
-  // }
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessages(
+      ChatUserModel user) {
+    return firestore
+        .collection("chats/${getConversationId(user.id)}/message/")
+        .orderBy("sent", descending: true)
+        .limit(1)
+        .snapshots();
+  }
 
   // ************************************ getUserInfo() function ******************************************
   // static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
@@ -224,21 +225,22 @@ class Apis {
   }
 
   // ************************************ sendMessage() function ******************************************
-  // static Future<void> sendMessage(
-  //     ChatUser chatUser, String msg, Type type) async {
-  //   final time = DateTime.now().millisecondsSinceEpoch.toString();
-  //   final Message message = Message(
-  //       msg: msg,
-  //       read: "",
-  //       told: chatUser.id,
-  //       type: type,
-  //       sent: time,
-  //       fromId: user.uid);
-  //   final ref = firestore
-  //       .collection("chats/${getConversationId(chatUser.id)}/message/");
-  //   await ref.doc(time).set(message.toJson()).then((value) =>
-  //       sendPushNotification(chatUser, type == Type.text ? msg : "image"));
-  // }
+  static Future<void> sendMessage(
+      ChatUserModel chatUser, String msg, Type type) async {
+    final time = DateTime.now().millisecondsSinceEpoch.toString();
+    final MessageModel message = MessageModel(
+        msg: msg,
+        read: "",
+        told: chatUser.id,
+        type: type,
+        sent: time,
+        fromId: user.uid);
+    final ref = firestore
+        .collection("chats/${getConversationId(chatUser.id)}/message/");
+    await ref.doc(time).set(message.toJson());
+    // await ref.doc(time).set(message.toJson()).then((value) =>
+    //     sendPushNotification(chatUser, type == Type.text ? msg : "image"),);
+  }
 
   // ************************************ updateProfilePicture() function ******************************************
   static Future<void> updateProfilePicture(file) async {
@@ -252,12 +254,12 @@ class Apis {
   }
 
   // ************************************ updateMessageReadTime() function ******************************************
-  // static Future<void> updateMessageReadTime(Message message) async {
-  //   firestore
-  //       .collection("chats/${getConversationId(message.fromId)}/message/")
-  //       .doc(message.sent)
-  //       .update({"read": DateTime.now().millisecondsSinceEpoch.toString()});
-  // }
+  static Future<void> updateMessageReadTime(MessageModel message) async {
+    firestore
+        .collection("chats/${getConversationId(message.fromId)}/message/")
+        .doc(message.sent)
+        .update({"read": DateTime.now().millisecondsSinceEpoch.toString()});
+  }
 
   // ************************************ sendChatImage() function ******************************************
   // static Future<void> sendChatImage(ChatUser chatUser, file) async {

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:youchat/apis/apis.dart';
@@ -6,6 +9,8 @@ import 'package:youchat/app/app_colors.dart';
 import 'package:youchat/app/app_strings.dart';
 import 'package:youchat/app/app_styles.dart';
 import 'package:youchat/models/chat_user_model.dart';
+import 'package:youchat/models/message_model.dart';
+import 'package:youchat/widgets/message_card.dart';
 
 class ChatScreen extends StatefulWidget {
   final ChatUserModel user;
@@ -16,63 +21,108 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _chatMessageController = TextEditingController();
+  List<MessageModel> _messageList = [];
+  bool _showEmoji = false;
+  @override
+  void dispose() {
+    super.dispose();
+    _chatMessageController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 1,
-          automaticallyImplyLeading: false,
-          flexibleSpace: _appBar(),
-        ),
-        backgroundColor: AppColor.scaffoldBg,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: StreamBuilder(
-                stream: Apis.firestore.collection("users").snapshots(),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                    case ConnectionState.none:
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: AppColor.whitePrimary,
-                        ),
-                      );
-                    case ConnectionState.active:
-                    case ConnectionState.done:
-                      final userList = [];
-                      // if (snapshot.hasData) {
-                      //   final data = snapshot.data?.docs;
-                      //   userList = data
-                      //           ?.map((e) => ChatUserModel.fromJson(e.data()))
-                      //           .toList() ??
-                      //       [];
-                      // }
-
-                      if (userList.isNotEmpty) {
-                        return ListView.builder(
-                          itemCount: userList.length,
-                          itemBuilder: (context, index) {
-                            return Text("data");
-                          },
-                        );
-                      } else {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 1,
+            automaticallyImplyLeading: false,
+            flexibleSpace: _appBar(),
+          ),
+          backgroundColor: AppColor.scaffoldBg,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: StreamBuilder(
+                  stream: Apis.getAllMessages(widget.user),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                      case ConnectionState.none:
                         return Center(
-                          child: Text(
-                            AppString.sayHi,
-                            style: AppStyle.largeTextStyle,
+                          child: CircularProgressIndicator(
+                            color: AppColor.whitePrimary,
                           ),
                         );
-                      }
-                  }
-                },
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                        if (snapshot.hasData) {
+                          final data = snapshot.data?.docs;
+                          _messageList = data
+                                  ?.map((e) => MessageModel.fromJson(e.data()))
+                                  .toList() ??
+                              [];
+                        }
+
+                        if (_messageList.isNotEmpty) {
+                          return ListView.builder(
+                            itemCount: _messageList.length,
+                            itemBuilder: (context, index) {
+                              return MessageCard(message: _messageList[index]);
+                            },
+                          );
+                        } else {
+                          return Center(
+                            child: Text(
+                              AppString.sayHi,
+                              style: AppStyle.largeTextStyle,
+                            ),
+                          );
+                        }
+                    }
+                  },
+                ),
               ),
-            ),
-            _chatInput(),
-          ],
+              _chatInput(),
+              if (_showEmoji)
+                SizedBox(
+                  height: 250,
+                  child: EmojiPicker(
+                    textEditingController: _chatMessageController,
+                    config: Config(
+                      columns: 8,
+                      emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+                      verticalSpacing: 0,
+                      horizontalSpacing: 0,
+                      gridPadding: EdgeInsets.zero,
+                      initCategory: Category.RECENT,
+                      bgColor: AppColor.bgLight1,
+                      indicatorColor: AppColor.blueColor,
+                      iconColor: AppColor.whiteSecondary,
+                      iconColorSelected: AppColor.blueColor,
+                      backspaceColor: AppColor.blueColor,
+                      skinToneDialogBgColor: AppColor.whitePrimary,
+                      skinToneIndicatorColor: AppColor.whiteSecondary,
+                      enableSkinTones: true,
+                      recentTabBehavior: RecentTabBehavior.RECENT,
+                      recentsLimit: 28,
+                      noRecents: const Text(
+                        AppString.noRecentEmoji,
+                        style: AppStyle.mediumBodyStyle,
+                        textAlign: TextAlign.center,
+                      ),
+                      loadingIndicator: const SizedBox.shrink(),
+                      tabIndicatorAnimDuration: kTabScrollDuration,
+                      categoryIcons: const CategoryIcons(),
+                      buttonMode: ButtonMode.MATERIAL,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -144,7 +194,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        FocusScope.of(context).unfocus();
+                        _showEmoji = !_showEmoji;
+                      });
+                    },
                     icon: Icon(
                       Icons.emoji_emotions,
                       color: AppColor.whitePrimary,
@@ -152,9 +207,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   Expanded(
                     child: TextField(
+                      onTap: () {
+                        setState(
+                          () {
+                            if (_showEmoji) _showEmoji = !_showEmoji;
+                          },
+                        );
+                      },
+                      controller: _chatMessageController,
                       style: TextStyle(color: AppColor.whitePrimary),
                       cursorColor: AppColor.whitePrimary,
                       keyboardType: TextInputType.multiline,
+
+                      
                       maxLines: null,
                       decoration: InputDecoration(
                         fillColor: AppColor.bgLight1,
@@ -190,7 +255,17 @@ class _ChatScreenState extends State<ChatScreen> {
             color: AppColor.bgLight2,
             padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
             shape: CircleBorder(),
-            onPressed: () {},
+            onPressed: () {
+              if (_chatMessageController.text.isNotEmpty) {
+                Apis.sendMessage(
+                  widget.user,
+                  _chatMessageController.text,
+                  Type.text,
+                );
+                widget.user.unreadMessagesCount++;
+                _chatMessageController.text = "";
+              } else {}
+            },
             child: Icon(
               Icons.send,
               color: AppColor.whitePrimary,

@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:youchat/apis/apis.dart';
 import 'package:youchat/app/app_colors.dart';
 import 'package:youchat/app/app_strings.dart';
 import 'package:youchat/app/app_styles.dart';
 import 'package:youchat/app/routes/routes_name.dart';
 import 'package:youchat/models/chat_user_model.dart';
+import 'package:youchat/screens/auth/login_screen.dart';
 import 'package:youchat/widgets/chat_user_card.dart';
 import 'package:youchat/widgets/drawer_widget.dart';
 
@@ -89,10 +92,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Text(
                     AppString.youChat,
                   ),
-            leading: Icon(
-              Icons.home_outlined,
-              color: AppColor.whiteSecondary,
-              size: 30,
+            leading: InkWell(
+              onTap: () async {
+                await Apis.auth.signOut().then(
+                  (value) async {
+                    await GoogleSignIn().signOut().then(
+                      (value) {
+                        Navigator.popUntil(context, (route) => route.isFirst);
+                        Apis.auth = FirebaseAuth.instance;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+              child: Icon(
+                Icons.home_outlined,
+                color: AppColor.whiteSecondary,
+                size: 30,
+              ),
             ),
             actions: [
               IconButton(
@@ -141,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           drawer: MobileDrawer(),
           body: StreamBuilder(
-            stream: Apis.firestore.collection("users").snapshots(),
+            stream: Apis.getAllUser(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:

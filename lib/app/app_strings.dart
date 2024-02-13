@@ -15,4 +15,5 @@ class AppString {
   static const selectProfilePhoto = "Select profile photo";
   static const typeMessage = "Type message...";
   static const sayHi = "Say Hi 👋";
+  static const noRecentEmoji = "No Recent Emoji";
 }
