@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 import 'package:youchat/app/app_colors.dart';
 import 'package:youchat/app/ui_helper.dart';
 import 'package:youchat/models/chat_user_model.dart';
@@ -92,76 +94,50 @@ class Apis {
     await firestore.collection("users").doc(user.uid).get().then((user) async {
       if (user.exists) {
         currentUser = ChatUserModel.fromJson(user.data()!);
-        // await getFirebaseMessagingToken();
+        await getFirebaseMessagingToken();
       } else {
         await createUser().then((value) => getCurrentUserInfo());
       }
     });
   }
-  // ************************************  sendPushNotification() function *******************************
-  // static Future<void> sendPushNotification(
-  //     ChatUser chatUser, String msg) async {
-  //   try {
-  //     final body = {
-  //       "to": chatUser.pushToken,
-  //       "notification": {
-  //         "title": currentUser!.name,
-  //         "body": msg,
-  //         "android_channel_id": "Chats",
-  //       },
-  //       "data": {
-  //         "click_action": "FLUTTER_NOTIFICATION_CLICK",
-  //       },
-  //     };
 
-  //     await post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
-  //         headers: {
-  //           HttpHeaders.contentTypeHeader: "application/json",
-  //           HttpHeaders.authorizationHeader:
-  //               "key=AAAAK1-i0Bs:APA91bGOQ1nWHU33Hz4viQz9PSO_v7tz1N3ipbFSBF8BvzgnH07PoywpWhqOIj0QP1LXUyR3RIjo7GbYvI2o3ShgAhbLR0JtRye6C396Pwoz0CICsA_GYwvmzrbPBjmT9Vt-LIAc5fWg",
-  //         },
-  //         body: jsonEncode(body));
-  //   } catch (error) {
-  //     print(error);
-  //   }
-  // }
+  // ************************************  sendPushNotification() function *******************************
+  static Future<void> sendPushNotification(
+      ChatUserModel chatUser, String msg) async {
+    try {
+      final body = {
+        "to": chatUser.pushToken,
+        "notification": {
+          "title": currentUser!.name,
+          "body": msg,
+          "android_channel_id": "Chats",
+        },
+        "data": {
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+        },
+      };
+
+      await post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
+          headers: {
+            HttpHeaders.contentTypeHeader: "application/json",
+            HttpHeaders.authorizationHeader:
+                "key=AAAA3qjiH2U:APA91bG8kAOaLfB3im-Ru7DWgzEgInUDSBxPC-6Ddzu5Fyt6GNwDfCXbFkAX1u6x7uS4YdSCo4ohuMBzTfwHGe31Jqal-cWL3_3IGXzbdLc6UF2nYDYI3O8onw3SWhCgUqdZxcB56MaN",
+          },
+          body: jsonEncode(body));
+    } catch (error) {
+      print(error);
+    }
+  }
 
   // ************************************  getFirebaseMessagingToken() function *****************************
-  // static Future<void> getFirebaseMessagingToken() async {
-  //   await fMessaging.requestPermission();
-  //   await fMessaging.getToken().then((token) {
-  //     if (token != null) {
-  //       currentUser?.pushToken = token;
-  //     }
-  //   });
-  // }
-
-  // ************************************  createUserWithEmailAndPassword() function ***************************
-  // static Future<void> createUserWithEmailAndPassword(
-  //   String name,
-  //   String email,
-  // ) async {
-  //   final time = DateTime.now().second.toString();
-
-  //   final chatUser = ChatUser(
-  //     id: user.uid,
-  //     name: name,
-  //     email: email,
-  //     about: "Hey there, I'm using U Chat!",
-  //     image: user.photoURL.toString(),
-
-  //     createdAt: time,
-  //     isOnline: false,
-  //     lastActive: time,
-  //     pushToken: "",
-  //   );
-
-  //   await firestore
-  //       .collection("users")
-  //       .doc(user.uid)
-  //       .set(chatUser.toJson())
-  //       .then((value) {});
-  // }
+  static Future<void> getFirebaseMessagingToken() async {
+    await fMessaging.requestPermission();
+    await fMessaging.getToken().then((token) {
+      if (token != null) {
+        currentUser?.pushToken = token;
+      }
+    });
+  }
 
   // ************************************  getConversationId() arrow function ******************************************
   static String getConversationId(String id) => user.uid.hashCode <= id.hashCode
@@ -199,23 +175,25 @@ class Apis {
   }
 
   // ************************************ getUserInfo() function ******************************************
-  // static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
-  //     ChatUser chatUser) {
-  //   return firestore
-  //       .collection("users")
-  //       .where("id", isEqualTo: chatUser.id)
-
-  //       .snapshots();
-  // }
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
+      ChatUserModel chatUserModel) {
+    return firestore
+        .collection("users")
+        .where(
+          "id",
+          isEqualTo: chatUserModel.id,
+        )
+        .snapshots();
+  }
 
   // ************************************ updateActiveStatus() function ******************************************
-  // static Future<void> updateActiveStatus(bool isOnline) async {
-  //   firestore.collection("users").doc(user.uid).update({
-  //     "is_online": isOnline,
-  //     "last_active": DateTime.now().millisecondsSinceEpoch.toString(),
-  //     "push_token": currentUser?.pushToken,
-  //   });
-  // }
+  static Future<void> updateActiveStatus(bool isOnline) async {
+    firestore.collection("users").doc(user.uid).update({
+      "is_online": isOnline,
+      "last_active": DateTime.now().millisecondsSinceEpoch.toString(),
+      "push_token": currentUser?.pushToken,
+    });
+  }
 
   // ************************************ updateUserInfo() function ******************************************
   static Future<void> updateUserInfo() async {
@@ -238,8 +216,10 @@ class Apis {
     final ref = firestore
         .collection("chats/${getConversationId(chatUser.id)}/message/");
     await ref.doc(time).set(message.toJson());
-    // await ref.doc(time).set(message.toJson()).then((value) =>
-    //     sendPushNotification(chatUser, type == Type.text ? msg : "image"),);
+    await ref.doc(time).set(message.toJson()).then(
+          (value) =>
+              sendPushNotification(chatUser, type == Type.text ? msg : "image"),
+        );
   }
 
   // ************************************ updateProfilePicture() function ******************************************
@@ -262,14 +242,14 @@ class Apis {
   }
 
   // ************************************ sendChatImage() function ******************************************
-  // static Future<void> sendChatImage(ChatUser chatUser, file) async {
-  //   final ext = file.path.split(".").last;
-  //   final ref = storage.ref().child(
-  //       "image/${getConversationId(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext");
-  //   await ref.putFile(file, SettableMetadata(contentType: "image/$ext"));
-  //   final imageUrl = await ref.getDownloadURL();
-  //   await Apis.sendMessage(chatUser, imageUrl, Type.image);
-  // }
+  static Future<void> sendChatImage(ChatUserModel chatUserModel, file) async {
+    final ext = file.path.split(".").last;
+    final ref = storage.ref().child(
+        "image/${getConversationId(chatUserModel.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext");
+    await ref.putFile(file, SettableMetadata(contentType: "image/$ext"));
+    final imageUrl = await ref.getDownloadURL();
+    await Apis.sendMessage(chatUserModel, imageUrl, Type.image);
+  }
 
   // ************************************ deleteMessage() function ******************************************
   // static Future<void> deleteMessage(Message message) async {
@@ -389,5 +369,31 @@ class Apis {
   //       }
   //     }
   //   });
+  // }
+  // ************************************  createUserWithEmailAndPassword() function ***************************
+  // static Future<void> createUserWithEmailAndPassword(
+  //   String name,
+  //   String email,
+  // ) async {
+  //   final time = DateTime.now().second.toString();
+
+  //   final chatUser = ChatUser(
+  //     id: user.uid,
+  //     name: name,
+  //     email: email,
+  //     about: "Hey there, I'm using U Chat!",
+  //     image: user.photoURL.toString(),
+
+  //     createdAt: time,
+  //     isOnline: false,
+  //     lastActive: time,
+  //     pushToken: "",
+  //   );
+
+  //   await firestore
+  //       .collection("users")
+  //       .doc(user.uid)
+  //       .set(chatUser.toJson())
+  //       .then((value) {});
   // }
 }

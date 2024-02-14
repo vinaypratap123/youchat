@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:youchat/apis/apis.dart';
@@ -59,15 +60,35 @@ class _MessageCardState extends State<MessageCard> {
           ),
           Flexible(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: EdgeInsets.symmetric(
+                  horizontal: widget.message.type == Type.text ? 20 : 1,
+                  vertical: widget.message.type == Type.text ? 5 : 1),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: AppColor.greenColor,
               ),
-              child: Text(
-                widget.message.msg,
-                style: AppStyle.smallBodyStyle,
-              ),
+              child: widget.message.type == Type.text
+                  ? Text(
+                      widget.message.msg,
+                      style: AppStyle.smallBodyStyle,
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.message.msg,
+                        placeholder: (context, url) => Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 1, vertical: 1),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.image,
+                          size: 70,
+                        ),
+                      ),
+                    ),
             ),
           ),
         ],
@@ -76,7 +97,7 @@ class _MessageCardState extends State<MessageCard> {
   }
 
   Widget _anotherMessage() {
-     if (widget.message.read.isEmpty) {
+    if (widget.message.read.isEmpty) {
       Apis.updateMessageReadTime(widget.message);
     }
     return Padding(
@@ -92,10 +113,30 @@ class _MessageCardState extends State<MessageCard> {
               ),
               child: Column(
                 children: [
-                  Text(
-                    widget.message.msg,
-                    style: AppStyle.smallBodyStyle,
-                  ),
+                  widget.message.type == Type.text
+                      ? Text(
+                          widget.message.msg,
+                          style: AppStyle.smallBodyStyle,
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            imageUrl: widget.message.msg,
+                            placeholder: (context, url) => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 1,
+                                vertical: 1,
+                              ),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.image,
+                              size: 70,
+                            ),
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -107,7 +148,7 @@ class _MessageCardState extends State<MessageCard> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                 MyDateUtils.getFormattedTime(
+                  MyDateUtils.getFormattedTime(
                     context: context,
                     time: widget.message.sent,
                   ),

@@ -3,7 +3,6 @@ import 'package:youchat/app/app_colors.dart';
 import 'package:youchat/app/app_styles.dart';
 
 class MobileDrawer extends StatefulWidget {
- 
   const MobileDrawer({super.key});
 
   @override

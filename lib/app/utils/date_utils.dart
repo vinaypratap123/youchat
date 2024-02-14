@@ -56,7 +56,7 @@ class MyDateUtils {
       return "last seen yesterday at $formattedTime";
     }
     String month = _getMonth(time);
-    return "last seen on ${time.day} $month on ${formattedTime}";
+    return "last seen ${time.day} $month on ${formattedTime}";
   }
 
   // ================================ _getMonth() function=================================

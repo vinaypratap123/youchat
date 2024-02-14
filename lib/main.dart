@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_notification_channel/flutter_notification_channel.dart';
+import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:youchat/app/app_colors.dart';
 import 'package:youchat/app/routes/on_generate_route.dart';
 import 'package:youchat/firebase_options.dart';
@@ -46,4 +48,11 @@ _initializedFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  var result = await FlutterNotificationChannel.registerNotificationChannel(
+    description: 'for showing notification messages',
+    id: 'Chats',
+    importance: NotificationImportance.IMPORTANCE_HIGH,
+    name: 'YouChat',
+  );
+  print(result);
 }

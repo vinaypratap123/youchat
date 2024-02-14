@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:youchat/apis/apis.dart';
 import 'package:youchat/app/app_colors.dart';
@@ -28,18 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Apis.getCurrentUserInfo();
-    // Apis.updateActiveStatus(true);
-    // SystemChannels.lifecycle.setMessageHandler((message) {
-    //   if (Apis.auth.currentUser != null) {
-    //     if (message.toString().contains("resume"))
-    //       Apis.updateActiveStatus(true);
-    //     if (message.toString().contains("pause"))
-    //       Apis.updateActiveStatus(false);
-    //   }
+    Apis.updateActiveStatus(true);
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (Apis.auth.currentUser != null) {
+        if (message.toString().contains("resume"))
+          Apis.updateActiveStatus(true);
+        if (message.toString().contains("pause"))
+          Apis.updateActiveStatus(false);
+      }
 
-    //   return Future.value(message);
-    // }
-    // );
+      return Future.value(message);
+    });
   }
 
   @override
@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    RoutesName.userProfileScreen,
+                    RoutesName.editUserProfileScreen,
                     arguments: Apis.currentUser,
                   );
                 },

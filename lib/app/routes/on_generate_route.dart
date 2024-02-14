@@ -5,6 +5,7 @@ import 'package:youchat/app/routes/routes_name.dart';
 import 'package:youchat/models/chat_user_model.dart';
 import 'package:youchat/screens/auth/login_screen.dart';
 import 'package:youchat/screens/chat_screen.dart';
+import 'package:youchat/screens/edit_user_profile_screen.dart';
 import 'package:youchat/screens/home_screen.dart';
 import 'package:youchat/screens/user_profile_screen.dart';
 
@@ -21,6 +22,15 @@ class OnGenerateRoute {
       case RoutesName.homeScreen:
         {
           return routeBuilder(const HomeScreen());
+        }
+      // ************ EDIT USER PROFILE SCREEN ROUTE *******************
+      case RoutesName.editUserProfileScreen:
+        {
+          return routeBuilder(
+            EditUserProfileScreen(
+              user: args as ChatUserModel,
+            ),
+          );
         }
       // ************ USER PROFILE SCREEN ROUTE *******************
       case RoutesName.userProfileScreen:

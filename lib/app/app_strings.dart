@@ -16,4 +16,5 @@ class AppString {
   static const typeMessage = "Type message...";
   static const sayHi = "Say Hi 👋";
   static const noRecentEmoji = "No Recent Emoji";
+  static const online = "Online";
 }
