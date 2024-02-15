@@ -26,6 +26,7 @@ class EditUserProfileScreen extends StatefulWidget {
 
 class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
   String? _image;
+   // ***************************** build() function ****************************
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -146,7 +147,7 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
       ),
     );
   }
-
+ // ***************************** _showBottomSheet() function ****************************
   void _showBottomSheet() {
     showModalBottomSheet(
       backgroundColor: AppColor.bgLight2,

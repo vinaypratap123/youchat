@@ -29,4 +29,8 @@ class AppStyle {
     fontSize: 10,
     color: AppColor.whiteSecondary,
   );
+  static const TextStyle smallRedTextStyle = const TextStyle(
+    fontSize: 16,
+    color: AppColor.redColor,
+  );
 }

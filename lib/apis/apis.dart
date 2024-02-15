@@ -252,23 +252,23 @@ class Apis {
   }
 
   // ************************************ deleteMessage() function ******************************************
-  // static Future<void> deleteMessage(Message message) async {
-  //   firestore
-  //       .collection("chats/${getConversationId(message.told)}/message/")
-  //       .doc(message.sent)
-  //       .delete();
-  //   if (message.type == Type.image) storage.refFromURL(message.msg).delete();
-  // }
+  static Future<void> deleteMessage(MessageModel message) async {
+    firestore
+        .collection("chats/${getConversationId(message.told)}/message/")
+        .doc(message.sent)
+        .delete();
+    if (message.type == Type.image) storage.refFromURL(message.msg).delete();
+  }
 
   // ************************************ updateMessage() function ******************************************
 
-  // static Future<void> updateMessage(
-  //     Message message, String updatedMessage) async {
-  //   firestore
-  //       .collection("chats/${getConversationId(message.told)}/message/")
-  //       .doc(message.sent)
-  //       .update({"msg": updatedMessage});
-  // }
+  static Future<void> updateMessage(
+      MessageModel message, String updatedMessage) async {
+    firestore
+        .collection("chats/${getConversationId(message.told)}/message/")
+        .doc(message.sent)
+        .update({"msg": updatedMessage});
+  }
   // ************************************ updatereadcount() function ******************************************
 
   // static Future<void> updateReadCount(int unReadCount) async {

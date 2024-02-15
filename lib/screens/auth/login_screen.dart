@@ -14,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // // ***************************** handleGoogleLogin() function ****************************
+  // ***************************** handleGoogleLogin() function ****************************
   dynamic _handleGoogleLogin() {
     UiHelper.showProgressBar(context);
     Apis.signInWithGoogle(context).then(
@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+ // ***************************** build() function ****************************
   @override
   Widget build(BuildContext context) {
     return Scaffold(

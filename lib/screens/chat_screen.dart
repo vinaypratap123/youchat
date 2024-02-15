@@ -34,6 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _chatMessageController.dispose();
   }
 
+  // ***************************** build() function ****************************
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -138,6 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // ***************************** app bar() function ****************************
   Widget _appBar() {
     return GestureDetector(
       onTap: () {
@@ -217,6 +219,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // ***************************** chat input() function ****************************
   Widget _chatInput() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),

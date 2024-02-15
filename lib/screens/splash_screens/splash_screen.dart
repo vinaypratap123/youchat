@@ -15,6 +15,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+   // ***************************** init() function ****************************
   void initState() {
     super.initState();
     Future.delayed(
@@ -28,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
       },
     );
   }
+   // ***************************** build() function ****************************
 
   @override
   Widget build(BuildContext context) {

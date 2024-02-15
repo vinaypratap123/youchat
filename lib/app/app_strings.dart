@@ -17,4 +17,15 @@ class AppString {
   static const sayHi = "Say Hi 👋";
   static const noRecentEmoji = "No Recent Emoji";
   static const online = "Online";
+  static const copyMessage = "Copy Message";
+  static const messageCopied = "Message Copied";
+  static const imageSaved = "Image Saved";
+  static const editMessage = "Edit Message";
+  static const deleteMessage = "Delete Message";
+  static const starMessage = "Star Message";
+  static const notSeenYet = "Not Seen Yet";
+  static const deleteForEveryone = "Delete For Everyone";
+  static const deleteForMe = "Delete For Me";
+  static const updateMessage = "Update Message";
+  static const cancel = "Cancel";
 }

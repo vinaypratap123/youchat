@@ -17,6 +17,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   String? _image;
+  // ***************************** build() function ****************************
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
